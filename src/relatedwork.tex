@@ -1,0 +1,62 @@
+% \subsection{Fusion Teachniques}
+% \subsection{Related Database Systems}
+
+Fusion techniques are popular due to their success in reducing intermediate
+results. This is especially true for compiled environments which easily
+allow code fusion.
+
+In the MATLAB-to-FORTRAN compiler~\cite{rose1999:techniques}, shape and size
+information can be obtained from a conformability analysis with a set of
+well-defined conformable operators for scalar, vector, and matrix.
+However, no further operator fusions after conformability analysis are provided.
+
+In the R programming language, a vectorizer is proposed for the built-in
+function \texttt{Apply}~\cite{Wang2015:vectorization}. The function
+\texttt{Apply} is similar to our list-based functions, which take
+a function and a list of data inputs as parameters and repeatedly apply
+the function. Their vectorizer involves both code and data transformation
+while we focus on code optimization. Additionally, we explore a wider set
+of built-in functions rather than only a single list-based function.
+
+Ju et al.~\cite{ju1994:array} investigate built-in function fusion in a pure
+array-based programming language, APL. They classify operators into categories
+based on the features of the functions and present a model to help generate
+parallel code when fusing built-in functions. Ching et al.~\cite{ChingZ12parallel}
+use simple techniques to fuse arithmetic functions when compiling APL to parallel
+C code. In contrast, our work is aimed at array-based programs generated from
+SQL queries, considering functions important to database operators.
+
+HyPer~\cite{Neumann2011:HyPer}, an in-memory database system, adopts a data-centric
+model when compiling SQL queries to LLVM code. Their model combines algebraic
+operators in database execution plans to avoid generating intermediate results.
+HorseQC~\cite{FunkeBNMT18:HorseQC} proposes \textit{fusion operators} for
+fusing multiple relational operations. Both HyPer and HorseQC share our goal
+of fusing operators. However, we approach the problem from a static analysis
+perspective that operates on the IR-level rather than directly on the execution plan.
+
+TVM~\cite{Chen18:TVM}, a system designed for deep learning, introduces
+operator fusion for graph operators when generating efficient GPU code.
+Their approach is limited, as the fusion rules are fairly simple and
+specific to fusion between categories.  We provide a more sophisticated
+fusion approach which considers more categories and defines systematic
+data-flow analysis to identify fusion opportunities.
+
+Similar to optimizations for arrays~\cite{KumarH14,FoleyH16matjuice},
+we exploit type and shape information of arrays to generate efficient code.
+But due to the high-level semantics of HorseIR programs, we avoid
+complicated vectorization techniques~\cite{menon1999case,ChenKLH16}.
+
+When loop fusion is applied to query related code, it is complicated to
+identify optimization opportunities by using a predefined set of rules.
+The DBLAB/LB query compiler~\cite{ShaikhhaKPBD016} 
+provides fusion rules for different loop fusion algorithms to generate optimized code
+\cite{Shaikhha2018:LoopFusion}, however, just as the patterns in \OldPaper, it is
+challenging to generalize. % page 21
+The Peloton in-memory DBMS~\cite{Menon2017:Peloton} considers operator
+fusion for operators within a pipeline. Again, the use quite specialized fusion
+rules, while we provide a more general optimization approach. 
+
+% \todo{Q: Do we need to mention some papers/tools/systems which do not support
+% operator fusion? for example, MonetDB,HyPer,...}
+
+

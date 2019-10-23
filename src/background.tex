@@ -1,0 +1,110 @@
+% \hanfeng{Working on this section.  Please come back later!}
+
+%In this section, we present the principles of loop fusion techniques for array-based optimization, and then provide background on HorseIR and its optimization capabilities. 
+
+\subsection{Loop Fusion}
+
+Loop fusion is an effective technique for improving program performance since
+loops usually dominate the performance of program execution.
+In the context of array-based languages, loop fusion is applied during the code generation phase, when array-based functions are translated into loops of the target language, e.g., C. The goal of loop fusion is to minimize the number of loops in the target program. 
+
+\textit{Fusion for removing intermediate results.}
+For example, assume the sequence of two element-wise functions  \texttt{T = A*B, R = T+C}, where T, A, B, R, C are vectors of the same length with no memory overlap.  A naive code-generation would translate this line-by-line into two loops for the two
+arithmetic functions, first multiplication, then addition, with an intermediate result vector T. However, the element-wise functions can be easily fused generating a single loop without intermediate vector (i.e., with loop body \texttt{R[i]=A[i]*B[i]+C[i]}). 
+
+\textit{Fusion when sharing the same loop head.}
+Generally, when two loops share the same loop head (but have different loop body), they often can be fused into a single loop in order to reduce the overhead of iterating over the two loops individually. However, the bodies of the two loops might have dependencies that make such a merge impossible. 
+
+%%% \begin{lstlisting}[style=CStyle]
+%%% // temp[10]: a temporary array
+%%% for(int i=0; i<10; i++){
+%%%         temp[i] = C[i] * D[i];
+%%% }
+%%% for(int i=0; i<10; i++){
+%%%         A[i] = B[i] + temp[i];
+%%% }
+%%% \end{lstlisting}
+
+%%% \begin{lstlisting}[style=CStyle]
+%%% for(int i=0; i<10; i++){
+%%%         A[i] = B[i] + C[i] * D[i];
+%%% }
+%%% \end{lstlisting}
+
+%%% \todo{Explain how challenging loop fusion is.}
+
+Ideally, a smart compiler can optimize loops as follows:
+(1) resolve the data dependency between variables inside loops;
+(2) identify the use of temporary, intermediate result arrays; and
+(3) fuse the for loops and avoid the intermediate result arrays whenever possible.
+
+
+However, automatic loop fusion is challenging for compilers ~\cite{Kennedy01:FastFusion,Kennedy1993:LoopFusion}.
+Instead, we believe it is much easier if the potential of loop fusion is already performed looking at the high-level language (i.e., in the array-based program) due to the higher level of abstraction.
+
+\subsection{HorseIR}
+
+HorseIR \OldPaper was designed to represent execution plans for SQL queries where data is represented in column-format and assumed to reside in main-memory. HorseIR represents the columns of the database tables as vectors, and uses lists for compound data. It provides dozens of data types to accommodate the many data types found in database systems. 
+Moreover, it supports a large set of array-based built-in functions that represent the arithmetic and database-related operators that are commonly used in SQL queries.
+
+Fig.~\ref{fig:motivation_example} shows a motivating example of queries executing with HorseIR framework. Fig.~\ref{fig:motivation_sql} shows a SQL query on the database table \texttt{store\_items}. The WHERE clause represents a selection filtering only those records of the table that fulfill certain conditions on the \texttt{item_date} column. The SELECT clause projects on columns \texttt{item_price} and \texttt{item\_discount}, performing an element-wise arithmetic function (multiplication) and then aggregation over the result. 
+
+\input{src/figure/motivation_horseir}
+
+Such a query is first translated into a query execution plan. The previous
+work~\OldPaper uses the advanced query optimizer of the HyPer database
+system~\cite{Neumann2011:HyPer} to generate high-performance execution plans.
+Then, the execution plan is translated into HorseIR using both standard array
+language and database-specific built-in functions. By not directly translating
+queries into HorseIR but instead translating the optimized execution plans, the
+approach leverages the extensive SQL-specific query optimization experience of
+the database community.
+
+Fig.~\ref{fig:motivation_horseir} shows the resulting HorseIR program without
+optimization and many intermediate results. From there, the previous
+work~\OldPaper proposes optimizations based on element-wise fusion and fusion
+with patterns. For example, (S0) and (S1) in the HorseIR program are easily
+fused into one statement, as \texttt{@gt} and \texttt{@lt} are element-wise
+functions. Since there is a large set of such functions, this approach has
+shown to be very beneficial. 
+Moreover, generating parallel code for element-wise functions is easy as they
+are dependence-free.
+
+
+
+However, once functions are more complex, such as the \texttt{@compress}
+functions of lines (S3) and (S4) in the example, fusion is no longer
+straightforward, as these high-level built-in functions contain data-dependent
+loops implicitly. 
+Thus, fusion across such functions is not supported by the previous
+work~\OldPaper which instead generates separate loops for them.
+This can become a severe performance bottleneck, especially when the
+intermediate results are barely reused. 
+
+\texttt{@compress} is a very common function in SQL queries. In the example, \texttt{t2} is a boolean vector indicating the indices of the records that fulfill the filtering condition of the query. In (S3) and (S4) @compress retrieves the corresponding element values of the \texttt{item\_price} and \texttt{item\_discount} columns. However, the intermediate results of \texttt{t3} and \texttt{t4} can be avoided because the retrieval can be fused with the subsequent arithmetic and aggregation functions. 
+
+In fact, for the given example, it is possible to fuse everything into one single loop as shown in Fig.~\ref{fig:motivation_example} (c). In this paper, we show how fusion \textit{across} built-in functions can be done automatically and systematically by using a principled shape and conformity analysis. 
+
+Importantly, note that the previous work~\OldPaper, in addition to element-wise
+fusion, also supports fusion based on pattern rules, such as tree-based
+patterns. However, using patterns is quite challenging as it requires the expertise
+of SQL execution plans. Furthermore, there exist many different types of
+queries, and thus potentially many different patterns. It is not clear,
+whether the patterns presented in \OldPaper are exhaustive. 
+
+
+
+
+%\subsection{An Example} %Fusion for HorseIR Functions}
+
+
+
+
+
+% \subsection{Type and Shape}
+% \todo{introduce type and shape in HorseIR}
+
+  
+
+
+

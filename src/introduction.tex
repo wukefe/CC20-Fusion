@@ -1,0 +1,111 @@
+While database systems have traditionally stored relational tables on a per-row
+basis, recent developments have shown that a column-store format can outperform
+traditional RDBMS for many workloads, particularly when the data fits into
+main memory.
+One of the first research prototypes of a column-based database manage systems
+(DBMS) was MonetDB \cite{IdreosS2012}, still an active research project, but
+many commercial systems now also support column-based storage (e.g.
+Microsoft SQL Server~\cite{msqlserver},
+SAP HANA~\cite{FarberF2012}, and
+HyPer~\cite{Neumann2011:HyPer}).
+% Microsoft SQL server
+This fundamental shift in database architecture has resulted in a large body of
+research efforts within the database community looking into efficient SQL query
+execution on such a data format.
+
+Given that in a column store each column of a table is stored as an array,
+array programming languages appear as a promising construct to provide support
+for query execution. In fact, \OldPaperAuthor introduced an intermediate
+representation (IR) language, called \textit{HorseIR}, targeted at database
+support.  SQL queries are first transformed into execution plans using
+standard database optimization techniques that describe in which order and
+how database operators such as joins, selections and aggregations should be
+executed depending on the data to be analyzed. These execution plans are
+then translated into HorseIR, the resulting code is optimized using
+techniques from array programming, and finally the optimized code is
+compiled into C code executable on different platforms.
+% \OldPaper shows very good results on standard database benchmarks.
+
+The approach used in HorseIR, however, does not take full advantage of the optimization techniques available. Instead, it is restricted to basic code fusion of element-wise operators, and although it explores some high-level pattern-based optimization techniques, these require considerable knowledge of database operators.  Optimization potential is also reduced by extensive use of built-in functions, the complexity of which limits optimization.
+
+For example, it is common for SQL queries to do a selection (selecting some rows based on the filter criteria on one column) and then perform aggregation, such as a summation.  In an array-based language this can be represented as
+
+\begin{small}
+\begin{Verbatim}[xleftmargin=.3\columnwidth]
+R = sum(filter(C, A))
+\end{Verbatim}
+\end{small}
+
+%%% $$
+%%% R = sum(filter(C, A))
+%%% $$
+
+\noindent{}where the condition \texttt{C} is a boolean vector, the input array \texttt{A}
+is a vector with the same number of elements, and the result \texttt{R} is a
+scalar.  A straightforward way to generate C code from this is to generate two loops, the first applying the boolean selection and producing an intermediate result, and the second loop performing the reduction on this intermediate result.  A more optimized version, however, would fuse the two loops into one, performing the reduction on the fly and avoiding generation of an intermediate result:
+
+% add lines around box: frame=single
+\begin{small}
+\begin{Verbatim}[xleftmargin=.15\columnwidth]
+R=0;
+for(int i=0; i<C.size; i++) {
+    if(C[i]) { // true block
+        R += A[i];
+    }
+}
+\end{Verbatim}
+\end{small}
+
+%%% \begin{lstlisting}[style=CStyle]
+%%% for(int i=0; i<10; i++){
+%%%     if(C[i]) { // true block
+%%%         R += A[i]
+%%%     }
+%%% }
+%%% \end{lstlisting}
+
+%% However, HorseIR describes both sum and filter as built-in functions, and
+%% currently no optimization across those functions can be performed.
+\noindent{}The analysis required to generate such code from a series of built-in functions, however, is complex,
+depending on non-trivial array dependency analysis as well as knowledge of array dimensions, and 
+while possible in principle, our experience has been that these optimization opportunities are not found by our available C compilers.
+
+In this paper we provide a more systematic approach to
+analyzing the query program and generating optimized code. In particular, we provide
+a detailed analysis of the most important built-in functions that are useful
+for executing SQL operators, and how we can optimize across such functions.
+To do so, we have a closer look at \textit{shape analysis}, and how shape propagates
+when functions are combined. This allows us to use loop fusion extensively to
+avoid unnecessary iterations over the data and intermediate results.  
+
+% contribution
+The contributions of this paper are summarized as follows:
+
+\begin{itemize}
+\item We explore a new approach to improve database query performance by
+      applying techniques derived from array programming. We focus on HorseIR, an IR specifically designed to support database query execution.
+\item We perform shape analysis on the built-in functions of HorseIR that represent database operators. This allows us to collect precise shape information and provide a conformability analysis to identify fusible sections in the HorseIR code. 
+\item We present a set of optimization and code generation strategies to automatically
+      generate optimized code.
+\item We conduct experiments on the database benchmark TPC-H, to show the effectiveness of our technique.
+\end{itemize}
+
+\begin{comment}
+The rest of this paper is organized as follows:
+\refSec{Sec:background}
+provides the background of HorseIR and array-based optimizations.
+\refSec{Sec:overview}
+introduces the description of the overview of our approach.
+\refSec{Sec:shape}
+presents our shape analysis for different groups of functions.
+\refSec{Sec:conformability}
+introduces our conformability analysis to identify fusible sections.
+\refSec{Sec:codegen}
+describes our code generation rules for generating efficient code.
+\refSec{Sec:evaluation}
+shows our experiments and experimental results.
+\refSec{Sec:relatedwork}
+discusses related work, and
+\refSec{Sec:conclusion}
+concludes.
+\end{comment}
