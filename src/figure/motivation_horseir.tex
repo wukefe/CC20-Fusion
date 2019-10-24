@@ -11,17 +11,17 @@ SELECT
 FROM
   store_items
 WHERE
-  item_date > 2010.09.01 AND
-  item_date < 2010.09.30;
+  item_date>=2010.09.01 AND
+  item_date<=2010.09.30;
 \end{lstlisting}
 \caption{An SQL query example} \label{fig:motivation_sql}
 \end{subfigure}
 \hfill
-\begin{subfigure}[b]{.7\columnwidth}
+\begin{subfigure}[b]{.72\columnwidth}
 \begin{lstlisting}[language=HorseIR, basicstyle=\footnotesize, literate = {-}{-}1]
 // ... load columns from table
-(S0) t0:bool = @gt(c0,2010-09-01:date);
-(S1) t1:bool = @lt(c0,2010-09-30:date);
+(S0) t0:bool = @geq(c0,2010-09-01:date);
+(S1) t1:bool = @leq(c0,2010-09-30:date);
 (S2) t2:bool = @and(t0, t1);
 (S3) t3:f64  = @compress(t2, c1);
 (S4) t4:f64  = @compress(t2, c2);
@@ -40,8 +40,8 @@ WHERE
 //... load columns c0,c1,c2
 t6 = 0;
 for(int i=0; i<n; i++){
-  if(c0[i] > 20100901
-     && c0[i] < 20100930){
+  if(c0[i] >= 20100901
+     && c0[i] <= 20100930){
     t6 += c1[i] * c2[i];
   }
 }

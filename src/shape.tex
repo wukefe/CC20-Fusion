@@ -43,7 +43,7 @@ avoids storing intermediate results.
 
 \subsubsection{List}
 
-A list shape is composite, storing heterogeneous data in a ordered group of
+A list shape is composite, storing heterogeneous data in an ordered group of
 \textit{cells}. Each cell has its own shape, either a vector or a nested list.
 \begin{small}
 \begin{verbatim}
@@ -51,7 +51,7 @@ list_shape ::= { cell_shape };
 cell_shape ::= list_shape | vector_shape;
 \end{verbatim}
 \end{small}
-We denote a list shape as \texttt{list<$L_0,L_1,...,L_{n-1}$>} where $L_i$
+We denote a list shape as \texttt{list<$L_0,L_1,...,L_{n-1}$>}, where $L_i$
 is the shape of cell $i$ for \texttt{n} cells. Note that for SQL queries,
 list cells are always vectors, as they typically represent collections of columns
 or row indices.
@@ -211,7 +211,7 @@ list functions \texttt{@each*} and other functions.
 For vector functions, the return shape can either be:
 (1) a parameter shape;
 (2) a new vector shape;
-(4) an error occurs due to a shape mismatch.
+(3) an error occurs due to a shape mismatch.
 For case 2, we introduce notation, \shapeN{}, that generates a new dynamic shape.
 While the new shape may be identical to other shapes at runtime, our static
 analysis is conservative. Each function group has unique shape rules defined below.
@@ -435,7 +435,7 @@ y               & \shapeS & \shapeV{$c_0$} & \shapeV{$d_0$} & \shapeVS{$a_0$} \\
 %%% \end{tabular}
 %%% \end{table}
 
-\subsection{Lists}
+\subsubsection{Lists}
 
 List functions apply a function on cells individually and merge the results into a new list.
 For example, the \texttt{@each} function is shown in \refFig{fig:list_function}. In the
@@ -464,8 +464,8 @@ produces a new list with shape \texttt{list<@f($L_0\texttt{, A)}, \ldots, \textt
 
 \head{Function each\_right} takes two parameters: a variable \textit{of any type} and a list.
 The function is applied on the variable and each cell of the list to form a new list with cells for
-each pairing. Given input shapes \texttt{list<$L_0, \ldots, L_{n-1}$>} and \texttt{A}, the function
-produces a new list with shape \texttt{list<@f($L_0\texttt{, A)}, \ldots, \texttt{@f(}L_{n-1}\texttt{, A)}$>}.
+each pairing. Given input shapes \texttt{A} and \texttt{list<$L_0, \ldots, L_{n-1}$>}, the function
+produces a new list with shape \texttt{list<@f($\texttt{A, }L_0\texttt{)}, \ldots, \texttt{@f(A, }L_{n-1}$)>}.
 
 \head{Function each\_item} takes two lists of equal length as input and evaluates the given
 function on each pair of cells to form a new list. Given input shapes \texttt{list<$L_a$>} and
@@ -475,7 +475,7 @@ function on each pair of cells to form a new list. Given input shapes \texttt{li
 \head{Function raze} flattens a homogeneous list of vectors into a single vector, removing cell
 divisions. For any list the output shape is a dynamically sized vector \shapeV{d}.
 
-\subsection{Other Functions}
+\subsubsection{Other Functions}
 
 For all other functions, a new dynamic shape (either list or vector depending on the return type) is 
 generated as the output shape. This is conservative, but correctly prevents fusing any unknown or
