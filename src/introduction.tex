@@ -26,9 +26,27 @@ techniques from array programming, and finally the optimized code is
 compiled into C code executable on different platforms.
 % \OldPaper shows very good results on standard database benchmarks.
 
-The approach used in HorseIR, however, does not take full advantage of the optimization techniques available. Instead, it is restricted to basic code fusion of element-wise operators, and although it explores some high-level pattern-based optimization techniques, these require considerable knowledge of database operators.  Optimization potential is also reduced by extensive use of built-in functions, the complexity of which limits optimization.
+The approach used in HorseIR, however, does not take full advantage of the
+optimization techniques available. Instead, it is restricted to basic code
+fusion of element-wise operators, and although it explores some high-level
+pattern-based optimization techniques, these require considerable knowledge of
+database operators.  Optimization potential is also reduced by extensive use of
+built-in functions, the complexity of which limits optimization.
 
-For example, it is common for SQL queries to do a selection (selecting some rows based on the filter criteria on one column) and then perform aggregation, such as a summation.  In an array-based language this can be represented as
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.95\columnwidth]{./src/figure/basic-idea.pdf}
+\caption{Introducing automatic fusion to optimize the array-based code
+(HorseIR) generated from database queries with less pattern-based fusion.}
+\label{fig:fusion_idea}
+\end{figure}
+
+\refFig{fig:fusion_idea} shows that we aim at automatic fusion which includes
+element-wise fusion and some parts of pattern-based fusion so that less
+pattern-based fusion is required.
+For example, it is common for SQL queries to do a selection (selecting some
+rows based on the filter criteria on one column) and then perform aggregation,
+such as a summation.  In an array-based language this can be represented as
 
 \begin{small}
 \begin{Verbatim}[xleftmargin=.3\columnwidth]
@@ -44,17 +62,30 @@ R = sum(filter(C, A))
 is a vector with the same number of elements, and the result \texttt{R} is a
 scalar.  A straightforward way to generate C code from this is to generate two loops, the first applying the boolean selection and producing an intermediate result, and the second loop performing the reduction on this intermediate result.  A more optimized version, however, would fuse the two loops into one, performing the reduction on the fly and avoiding generation of an intermediate result:
 
-% add lines around box: frame=single
+\begin{center}
+\begin{minipage}{\linewidth}
 \begin{small}
-\begin{Verbatim}[xleftmargin=.15\columnwidth]
+\begin{lstlisting}[language=C, frame=single, xleftmargin=0mm, xrightmargin=5mm]
 R=0;
 for(int i=0; i<C.size; i++) {
-    if(C[i]) { // true block
-        R += A[i];
-    }
+    if(C[i]) { R += A[i]; } // true block
 }
-\end{Verbatim}
+\end{lstlisting}
 \end{small}
+\end{minipage}
+\end{center}
+
+% add lines around box: frame=single
+%\begin{small}
+%\begin{Verbatim}[xleftmargin=.15\columnwidth]
+%R=0;
+%for(int i=0; i<C.size; i++) {
+%    if(C[i]) { // true block
+%        R += A[i];
+%    }
+%}
+%\end{Verbatim}
+%\end{small}
 
 %%% \begin{lstlisting}[style=CStyle]
 %%% for(int i=0; i<10; i++){
@@ -69,6 +100,7 @@ for(int i=0; i<C.size; i++) {
 \noindent{}The analysis required to generate such code from a series of built-in functions, however, is complex,
 depending on non-trivial array dependency analysis as well as knowledge of array dimensions, and 
 while possible in principle, our experience has been that these optimization opportunities are not found by our available C compilers.
+
 
 In this paper we provide a more systematic approach to
 analyzing the query program and generating optimized code. In particular, we provide

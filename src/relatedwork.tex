@@ -1,22 +1,24 @@
 % \subsection{Fusion Teachniques}
 % \subsection{Related Database Systems}
 
-\hanfeng{Add new references or reinforce existing ones}
-
-\begin{description}
-\item[Lift with patterns] High-level synthesis of functional patterns with
-    Lift~\cite{Kristien19:LiftPatterns}.
-\item[WeldIR] Evaluating End-to-End Optimization for Data Analytics
-    Applications in Weld~\cite{Palkar18:Weld}.
-\item[Peloton] Our code generation fits the SIMD predicate evaluation used in
-    Peloton. That implies our code generation can be further improved with
-    lower but efficient instructions.
-\end{description}
-
+% \begin{description}
+% \item[Lift with patterns] High-level synthesis of functional patterns with
+%     Lift~\cite{Kristien19:LiftPatterns}.
+% \item[WeldIR] Evaluating End-to-End Optimization for Data Analytics
+%     Applications in Weld~\cite{Palkar18:Weld}.
+% \item[Peloton] Our code generation fits the SIMD predicate evaluation used in
+%     Peloton. That implies our code generation can be further improved with
+%     lower but efficient instructions.
+% \end{description}
 
 Fusion techniques are popular due to their success in reducing intermediate
 results. This is especially true for compiled environments which easily
 allow code fusion.
+
+\head{Fusion in programming languages}
+
+% Operator fusion is an effective technique for high-level programming languages,
+% especially for array-based programming languages.
 
 In the MATLAB-to-FORTRAN compiler~\cite{rose1999:techniques}, shape and size
 information can be obtained from a conformability analysis with a set of
@@ -39,6 +41,17 @@ use simple techniques to fuse arithmetic functions when compiling APL to paralle
 C code. In contrast, our work is aimed at array-based programs generated from
 SQL queries, considering functions important to database operators.
 
+Similar to optimizations for arrays~\cite{KumarH14,FoleyH16matjuice},
+we exploit type and shape information of arrays to generate efficient code.
+But due to the high-level semantics of HorseIR programs, we avoid
+complicated vectorization techniques~\cite{menon1999case,ChenKLH16}.
+
+\head{Fusion in query compilers}
+
+%As the previal of query compilers in database systems, it is important to
+%exploit fusion opportunities in standard SQL queries in order to generate
+%efficient code.
+
 HyPer~\cite{Neumann2011:HyPer}, an in-memory database system, adopts a data-centric
 model when compiling SQL queries to LLVM code. Their model combines algebraic
 operators in database execution plans to avoid generating intermediate results.
@@ -47,27 +60,34 @@ fusing multiple relational operations. Both HyPer and HorseQC share our goal
 of fusing operators. However, we approach the problem from a static analysis
 perspective that operates on the IR-level rather than directly on the execution plan.
 
-TVM~\cite{Chen18:TVM}, a system designed for deep learning, introduces
-operator fusion for graph operators when generating efficient GPU code.
-Their approach is limited, as the fusion rules are fairly simple and
-specific to fusion between categories.  We provide a more sophisticated
-fusion approach which considers more categories and defines systematic
-data-flow analysis to identify fusion opportunities.
-
-Similar to optimizations for arrays~\cite{KumarH14,FoleyH16matjuice},
-we exploit type and shape information of arrays to generate efficient code.
-But due to the high-level semantics of HorseIR programs, we avoid
-complicated vectorization techniques~\cite{menon1999case,ChenKLH16}.
-
 When loop fusion is applied to query related code, it is complicated to
 identify optimization opportunities by using a predefined set of rules.
-The DBLAB/LB query compiler~\cite{ShaikhhaKPBD016} 
-provides fusion rules for different loop fusion algorithms to generate optimized code
+The DBLAB/LB query compiler~\cite{ShaikhhaKPBD016} provides fusion rules for
+different loop fusion algorithms to generate optimized code
 \cite{Shaikhha2018:LoopFusion}, however, just as the patterns in \OldPaper, it is
 challenging to generalize. % page 21
 The Peloton in-memory DBMS~\cite{Menon2017:Peloton} considers operator
 fusion for operators within a pipeline. Again, the use quite specialized fusion
-rules, while we provide a more general optimization approach. 
+rules, while we provide a more general optimization approach.
+On the other hand, their core strategy, SIMD predicate evaluation, can
+be applied to our code generation directly.
+
+\head{Performance-oriented Systems}
+
+Weld~\cite{Palkar18:Weld} is designed for optimizing cross different platforms
+with an intermediate representation WeldIR. With rule-based fusion, it is able
+to perform element-wise fusion and common-loop-head fusion.
+TVM~\cite{Chen18:TVM}, a system designed for deep learning, introduces
+operator fusion for graph operators when generating efficient GPU code.
+Their approach is limited, as the fusion rules are fairly simple and
+specific to fusion between categories.
+We provide a more sophisticated fusion approach which considers more categories
+and defines systematic data-flow analysis to identify fusion opportunities.
+
+LIFT~\cite{Kristien19:LiftPatterns} shows a different approach by defining
+complex funcitonal patterns with precise descriptions for generating efficient
+code for parallel devices such as FPGA, as its input code from various domains
+rather than database queries.
 
 % \todo{Q: Do we need to mention some papers/tools/systems which do not support
 % operator fusion? for example, MonetDB,HyPer,...}
