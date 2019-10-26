@@ -57,6 +57,13 @@ Future work will look more closely at fusion potential for join operations.
 \label{fig:tpch_result}
 \end{figure*}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\columnwidth]{./src/figure/compile-time.pdf}
+\caption{Compile time for queries.}
+\label{fig:compile_time}
+\end{figure}
+
 
 \refFig{fig:tpch_result} shows the execution times using MonetDB, HorseIR-noopt,
 HorseIR-opt1, and HorseIR-opt2 on SF1 with increasing number of threads. 
@@ -133,7 +140,7 @@ execution.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=.85\columnwidth]{./src/figure/bar-number.pdf}
+\includegraphics[width=.9\columnwidth]{./src/figure/bar-number.pdf}
 \caption{Number of element-wise fused statements in HorseIR-opt1 and our new fusion in HorseIR-opt2.}
 \label{fig:opt_number}
 \end{figure}
