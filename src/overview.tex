@@ -10,7 +10,9 @@ can be found in \refFig{fig:overview}.
 
 Just as in previous work~\OldPaper, we first generate an optimized
 query execution plan using the HyPer database system~\cite{Neumann2011:HyPer}
-from the input query, and translate this plan into HorseIR. 
+\footnote{We can access HyPer's plan generator online but
+not its execution engine.  See \url{http://hyper-db.de/interface.html}}
+from the input query, and translate this plan into HorseIR.
 
 Next, local data-flow analysis processes the intermediate program and
 computes the shape information at each expression. Shapes are propagated

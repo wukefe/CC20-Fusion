@@ -11,8 +11,8 @@
 %     lower but efficient instructions.
 % \end{description}
 
-\todo{Add "How to Architect a Query Compiler, Revisited"~\cite{TahboubER18:Revisited}}
-\todo{Add "Generating code for holistic query evaluation"~\cite{}}
+% \todo{Add "How to Architect a Query Compiler, Revisited"~\cite{TahboubER18:Revisited}}
+% \todo{Add "Generating code for holistic query evaluation"~\cite{}}
 
 Fusion techniques are popular due to their success in reducing intermediate
 results. This is especially true for compiled environments which easily
@@ -59,9 +59,11 @@ HyPer~\cite{Neumann2011:HyPer}, an in-memory database system, adopts a data-cent
 model when compiling SQL queries to LLVM code. Their model combines algebraic
 operators in database execution plans to avoid generating intermediate results.
 HorseQC~\cite{FunkeBNMT18:HorseQC} proposes \textit{fusion operators} for
-fusing multiple relational operations. Both HyPer and HorseQC share our goal
-of fusing operators. However, we approach the problem from a static analysis
-perspective that operates on the IR-level rather than directly on the execution plan.
+fusing multiple relational operations.
+HIQUE~\cite{Krikellas10:HIQUE} generates C++ code using code templates for each operator.
+As can be seen, they share our goal of fusing operators. However, we approach
+the problem from a static analysis perspective that operates on the IR-level
+rather than directly on the execution plan.
 
 When loop fusion is applied to query related code, it is complicated to
 identify optimization opportunities by using a predefined set of rules.

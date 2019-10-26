@@ -57,13 +57,6 @@ Future work will look more closely at fusion potential for join operations.
 \label{fig:tpch_result}
 \end{figure*}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=.9\columnwidth]{./src/figure/compile-time.pdf}
-\caption{Compile time for queries.}
-\label{fig:compile_time}
-\end{figure}
-
 
 \refFig{fig:tpch_result} shows the execution times using MonetDB, HorseIR-noopt,
 HorseIR-opt1, and HorseIR-opt2 on SF1 with increasing number of threads. 
@@ -129,7 +122,6 @@ execution.
 %%% or come up with a new group and a new analysis in order to achieve code fusion.
 
 
-
 %%% \todo{The results of q1 and q14 are much slower than MonetDB, however, they are
 %%% faster than MonetDB on the previous paper.  (Already send email to Andrew to ask
 %%% for his help, maybe a RAM failure again)}
@@ -141,7 +133,8 @@ execution.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\columnwidth]{./src/figure/bar-number.pdf}
-\caption{Number of element-wise fused statements in HorseIR-opt1 and our new fusion in HorseIR-opt2.}
+\caption{Number of element-wise fused statements in HorseIR-opt1 and our new
+fusion in HorseIR-opt2.}
 \label{fig:opt_number}
 \end{figure}
 
@@ -154,13 +147,27 @@ We can see that our approach always fuses more statements than HorseIR-opt1.
 For q1 and q22, there exist a large set of list-related statements that can be
 fused together without the need of using patterns.  Furthermore, our optimizer
 performs a fair amount of fusions with mixed function types, such as
-element-wise and reduction functions. 
-
+element-wise and reduction functions.
 However, as we have seen in the previous analysis, fusing is not always
 beneficial. For instance, in q22, we perform many more fusions than
 HorseIR-opt1, but the loops have now complex expressions which actually results
 in worse performance compared to the HorseIR-opt1. 
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\columnwidth]{./src/figure/compile-time.pdf}
+\caption{Compilation time for generated C code.}
+\label{fig:compilation_time}
+\end{figure}
+
+The result of the compilation time of generated C code in
+\refFig{fig:compilation_time} demonstrates that HorseIR-opt2 needs the most
+compilation time as it identifies most optimizations and generates most complex
+code among three versions of code generated from HorseIR programs.
+As can be seen, the compilation time is almost the same for HorseIR-noopt because
+generated code contains library function calls that avoid any further optimizations.
+With a large size of input data or a query needs to be executed many times,
+the time spent on compilation time can be amortized.
 
 
 %%% In the query q1, the number of patterns are significantly reduced because a set
