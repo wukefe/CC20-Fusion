@@ -1,5 +1,3 @@
-\hanfeng{TODO: refactor introduction}
-
 While database systems have traditionally stored relational tables on a per-row
 basis, recent developments have shown that a column-store format can outperform
 traditional RDBMS for many workloads, particularly when the data fits into
@@ -35,17 +33,6 @@ pattern-based optimization techniques, these require considerable knowledge of
 database operators.  Optimization potential is also reduced by extensive use of
 built-in functions, the complexity of which limits optimization.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=.95\columnwidth]{./src/figure/basic-idea.pdf}
-\caption{Introducing automatic fusion to optimize the array-based code
-(HorseIR) generated from database queries with less pattern-based fusion.}
-\label{fig:fusion_idea}
-\end{figure}
-
-\refFig{fig:fusion_idea} shows that we aim at automatic fusion which includes
-element-wise fusion and some parts of pattern-based fusion so that less
-pattern-based fusion is required.
 For example, it is common for SQL queries to do a selection (selecting some
 rows based on the filter criteria on one column) and then perform aggregation,
 such as a summation.  In an array-based language this can be represented as
@@ -103,14 +90,30 @@ for(int i=0; i<C.size; i++) {
 depending on non-trivial array dependency analysis as well as knowledge of array dimensions, and 
 while possible in principle, our experience has been that these optimization opportunities are not found by our available C compilers.
 
+% \refFig{fig:fusion_idea} shows that we propose automatic fusion which contains
+% element-wise fusion and some parts of pattern-based fusion
+% so that less pattern-based fusion is required.
 
-In this paper we provide a more systematic approach to
-analyzing the query program and generating optimized code. In particular, we provide
-a detailed analysis of the most important built-in functions that are useful
-for executing SQL operators, and how we can optimize across such functions.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.95\columnwidth]{./src/figure/basic-idea.pdf}
+\caption{Introducing automatic fusion to optimize the array-based code
+(HorseIR) generated from database queries with less pattern-based fusion.}
+\label{fig:fusion_idea}
+\end{figure}
+
+In this paper we provide a more systematic approach to analyzing the query
+program and generating optimized code.
+As depicted in \refFig{fig:fusion_idea}, it is called \textit{automatic fusion}
+which contains element-wise fusion and some parts of pattern-based fusion so
+that less pattern-based fusion is required.
+In particular, we provide a detailed analysis of the most important built-in
+functions that are useful for executing SQL operators, and how we can optimize
+across such functions.
 To do so, we have a closer look at \textit{shape analysis}, and how shape propagates
 when functions are combined. This allows us to use loop fusion extensively to
 avoid unnecessary iterations over the data and intermediate results.  
+
 
 % contribution
 The contributions of this paper are summarized as follows:

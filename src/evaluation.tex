@@ -35,12 +35,21 @@ data. With an increasing scale factor, (nearly) each of the tables holds more
 data records. Our results are for SF1 but initial results on larger scale
 factors show similar results.
 
-For this paper, we have selected 8 of the 22 queries (q1/4/6/12/14/16/19/22).
-These are the queries where the basic built-in functions that we aim to fuse
-have a major impact on the query execution time. In particular, these queries
-have a maximum of 2 joins. Joins are very expensive, and in queries with more
-than 2 joins, the join execution takes up most of the time, thus, the
-optimizations presented in \OldPaper and in this paper have less impact.
+%% For this paper, we have selected 8 of the 22 queries (q1/4/6/12/14/16/19/22).
+%% These are the queries where the basic built-in functions that we aim to fuse
+%% have a major impact on the query execution time. In particular, these queries
+%% have a maximum of 2 joins. Joins are very expensive, and in queries with more
+%% than 2 joins, the join execution takes up most of the time, thus, the
+%% optimizations presented in \OldPaper and in this paper have less impact.
+%% Future work will look more closely at fusion potential for join operations.  
+
+For this paper, we have selected a subset of queries in which the basic built-in
+functions that we aim to fuse have a major impact on the query execution time.
+In particular, these queries have a maximum of 2 joins. Joins are very
+expensive, and in queries with more than 2 joins, the join execution takes up
+most of the time, thus, the optimizations presented in \OldPaper and in this
+paper have less impact.
+Hence, we have such 8 queries (q1/4/6/12/14/16/19/22) in our experiments.
 Future work will look more closely at fusion potential for join operations.  
 
 %% In our experiments, we use a number of SFs growing exponentially, i.e.

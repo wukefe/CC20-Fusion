@@ -162,12 +162,12 @@ or row indices.
 Built-in functions are categorized based on their predefined shape behaviours.
 This simplifies later analyses which depend on the shape behaviour and not
 the exact operation. For example, element-wise binary functions \texttt{@plus}
-and \texttt{@mult} share identical structure and may therefore share a single
+and \texttt{@mul} share identical structure and may therefore share a single
 set of shape propagation rules.
 \begin{small}
 \begin{Verbatim}[xleftmargin=.3\columnwidth]
 a:i32 = @plus(A, B);
-b:i32 = @mult(A, B);
+b:i32 = @mul(A, B);
 \end{Verbatim}
 \end{small}
 There are two kinds of built-in functions in HorseIR: functions for vectors and
