@@ -17,14 +17,27 @@ Given that in a column store each column of a table is stored as an array,
 array programming languages appear as a promising construct to provide support
 for query execution. In fact, \OldPaperAuthor introduced an intermediate
 representation (IR) language, called \textit{HorseIR}, targeted at database
-support.  SQL queries are first transformed into execution plans using
-standard database optimization techniques that describe in which order and
-how database operators such as joins, selections and aggregations should be
-executed depending on the data to be analyzed. These execution plans are
-then translated into HorseIR, the resulting code is optimized using
-techniques from array programming, and finally the optimized code is
-compiled into C code executable on different platforms.
+support.
+\new{It has been designed with database operators and optimization
+techniques targeting a fast execution of these operators.
+At the same time, it is a general high-level IR, and thus, can serve not only
+for the optimization of standard SQL operators but also for new sets of
+operators (e.g., developed for more complex data analysis),
+new categories of built-in functions with pre-defined behaviours can be added
+easily, and it could even be used by other array-based languages such as MATLAB
+as an intermediate representation.
+Thus, compared to query compilers in database systems such as HyPer, it is more
+general and extensible as HyPer performs a direct translation from relational
+algebra operators to optimized code.}
 % \OldPaper shows very good results on standard database benchmarks.
+
+SQL queries are first transformed into execution plans using standard database
+optimization techniques that describe in which order and how database operators
+such as joins, selections and aggregations should be executed depending on the
+data to be analyzed. These execution plans are then translated into HorseIR,
+the resulting code is optimized using techniques from array programming, and
+finally the optimized code is compiled into C code executable on different
+platforms.
 
 The approach used in HorseIR, however, does not take full advantage of the
 optimization techniques available. Instead, it is restricted to basic code

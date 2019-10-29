@@ -97,15 +97,10 @@ margin.
 \end{figure}
 
 In order to better understand the performance benefit of our approach across all thread levels, 
-\refFig{fig:tpch_sf1_speedup}  presents  the geometric mean for the comparison
-between HorseIR-opt2 in regard to HorseIR-opt1 and MonetDB. 
+\refFig{fig:tpch_sf1_speedup} presents the geometric mean for the comparison
+between HorseIR-opt2 in regard to HorseIR-opt1 and MonetDB.
 HorseIR-opt2 provides an improvement over MonetDB (mean > 1) for all but one
 query and the improvement is quite significant. 
-
-Comparing with HorseIR-opt1, we improve for four queries, are the same for two
-queries, and are worse for two queries. The average execution times of
-HorseIR-opt2 are about 12\% faster than HorseIR-opt1 in terms of geometric
-means.
 
 \textit{When we are better.}
 For q1, our optimizer is able to identify eight fusible sections that are
@@ -126,6 +121,17 @@ For queries q4 and q16, the filters are very selective and only a few rows
 qualify. Thus, fusing loops has little benefit but also does not harm the
 execution.
 
+\new{
+Comparing with HorseIR-opt1, we improve for four queries, are the same for two
+queries, and are worse for two queries. The average execution times of
+HorseIR-opt2 are about 12\% faster than HorseIR-opt1 in terms of geometric
+means.
+This performance increase is due to the significant increase in fused
+statements discussed in \refSec{fusing_stmts}.
+Our technique thus effectively identifies fusion opportunities in HorseIR
+programs generated from SQL queries using a more systematic and general
+approach than patterns.}
+
 %%% The main computation part of the queries have operators unable to be fused.
 %%% That means we can either improve the operators with efficient implementations
 %%% or come up with a new group and a new analysis in order to achieve code fusion.
@@ -137,7 +143,7 @@ execution.
 
 %%% \todo{Add scalability}
 
-\subsection{Fusing Statements}
+\subsection{Fusing Statements} \label{fusing_stmts}
 
 \begin{figure}[htbp]
 \centering
@@ -169,6 +175,7 @@ in worse performance compared to the HorseIR-opt1.
 \label{fig:compilation_time}
 \end{figure}
 
+\new{
 The result of the compilation time of generated C code in
 \refFig{fig:compilation_time} demonstrates that HorseIR-opt2 needs the most
 compilation time as it identifies most optimizations and generates most complex
@@ -177,6 +184,7 @@ As can be seen, the compilation time is almost the same for HorseIR-noopt becaus
 generated code contains library function calls that avoid any further optimizations.
 With a large size of input data or a query needs to be executed many times,
 the time spent on compilation time can be amortized.
+}
 
 
 %%% In the query q1, the number of patterns are significantly reduced because a set

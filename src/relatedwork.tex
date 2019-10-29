@@ -49,39 +49,55 @@ we exploit type and shape information of arrays to generate efficient code.
 But due to the high-level semantics of HorseIR programs, we avoid
 complicated vectorization techniques~\cite{menon1999case,ChenKLH16}.
 
-\head{Fusion in query compilers}
+\head{Fusion in database query optimizations}
 
 %As the previal of query compilers in database systems, it is important to
 %exploit fusion opportunities in standard SQL queries in order to generate
 %efficient code.
 
-HyPer~\cite{Neumann2011:HyPer}, an in-memory database system, adopts a data-centric
-model when compiling SQL queries to LLVM code. Their model combines algebraic
-operators in database execution plans to avoid generating intermediate results.
-HorseQC~\cite{FunkeBNMT18:HorseQC} proposes \textit{fusion operators} for
-fusing multiple relational operations.
-HIQUE~\cite{Krikellas10:HIQUE} generates C++ code using code templates for each operator.
-As can be seen, they share our goal of fusing operators. However, we approach
-the problem from a static analysis perspective that operates on the IR-level
-rather than directly on the execution plan.
+% fusing multiple relational operations.
+%HIQUE~\cite{Krikellas10:HIQUE} generates C++ code using code templates for each operator.
+% As can be seen, they share our goal of fusing operators. However, we approach
+% the problem from a static analysis perspective that operates on the IR-level
+% rather than directly on the execution plan.
 
+\new{
 When loop fusion is applied to query related code, it is complicated to
 identify optimization opportunities by using a predefined set of rules.
 The DBLAB/LB query compiler~\cite{ShaikhhaKPBD016} provides fusion rules for
 different loop fusion algorithms to generate optimized code
-\cite{Shaikhha2018:LoopFusion}, however, just as the patterns in \OldPaper, it is
+\cite{Shaikhha2018:LoopFusion}.
+stream-fusion~\cite{Shaikhha2018:LoopFusion} needs to define extra
+fusion-related constructs.
+WeldIR~\cite{Palkar18:Weld} adopts rule-based optimizations for element-wise
+and common-loop-head fusion.
+HorseQC\cite{FunkeBNMT18:HorseQC} and HIQUE~\cite{Krikellas10:HIQUE} present
+rule-based fusion strategies.  
+However, just as the patterns in \OldPaper, the rule-based approach is
 challenging to generalize. % page 21
-The Peloton in-memory DBMS~\cite{Menon2017:Peloton} considers operator
-fusion for operators within a pipeline. Again, the use quite specialized fusion
-rules, while we provide a more general optimization approach.
-On the other hand, their core strategy, SIMD predicate evaluation, can
-be applied to our code generation directly.
+}
+
+\new{
+HyPer~\cite{Neumann2011:HyPer}, an in-memory database system, adopts a data-centric
+model when compiling SQL queries to LLVM code. They developed a greedy
+algorithm to produce/consume operators directly in an execution plan in order
+to fuse relational operations directly.
+Peloton~\cite{Menon2017:Peloton} considers operator fusion for operators within a pipeline.
+We have a different fusion strategy, instead we provide a systematic
+approach which collects precise shape information on a well-defined array-based
+language for automatic fusion.}
+
+%%% The Peloton in-memory DBMS~\cite{Menon2017:Peloton} considers operator
+%%% fusion for operators within a pipeline. Again, the use quite specialized fusion
+%%% rules, while we provide a more general optimization approach.
+%%% On the other hand, their core strategy, SIMD predicate evaluation, can
+%%% be applied to our code generation directly.
 
 \head{Performance-oriented Systems}
 
-Weld~\cite{Palkar18:Weld} is designed for optimizing cross different platforms
-with an intermediate representation WeldIR. With rule-based fusion, it is able
-to perform element-wise fusion and common-loop-head fusion.
+%%% Weld~\cite{Palkar18:Weld} is designed for optimizing cross different platforms
+%%% with an intermediate representation WeldIR. With rule-based fusion, it is able
+%%% to perform element-wise fusion and common-loop-head fusion.
 TVM~\cite{Chen18:TVM}, a system designed for deep learning, introduces
 operator fusion for graph operators when generating efficient GPU code.
 Their approach is limited, as the fusion rules are fairly simple and
