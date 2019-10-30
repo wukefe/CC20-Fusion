@@ -376,9 +376,10 @@ y              & \shapeS & \shapeV{$c_0$} & \shapeV{$d_0$} & \shapeVS{$a_0$} \\ 
 The array indexing function \texttt{@index} takes two vectors as input (values and
 indexes) and performs an indexed read. The output vector therefore contains one element
 per index, and thus its shape is determined by the shape of the index vector.
-\refTab{rule_indexing} shows the rules for the array indexing function where \texttt{x}
-contains the values, and \texttt{y} the indexes to fetch.
+%\refTab{rule_indexing} shows the rules for the array indexing function where \texttt{x}
+%contains the values, and \texttt{y} the indexes to fetch.
 
+\begin{comment}
 \begin{table}[htbp]
 \centering
 \caption{Rules for Array Indexing (X)} \label{rule_indexing}
@@ -394,6 +395,7 @@ y            & \shapeS & \shapeV{$c_0$} & \shapeV{$d_0$} & \shapeVS{$a_0$} \\ \h
 \end{tabular}
 \end{small}
 \end{table}
+\end{comment}
 
 \head{Special boolean functions.}
 Special boolean functions take a data vector as input and return a boolean vector
