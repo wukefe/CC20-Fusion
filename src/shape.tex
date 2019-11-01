@@ -311,7 +311,7 @@ describes the full shape rules where \texttt{x} is the mask and \texttt{y} the v
 vector.
 
 \begin{figure}[htbp]
-\begin{lstlisting}[language=HorseIR, frame=single, basicstyle=\footnotesize]
+\begin{lstlisting}[language=HorseIR, frame=single, basicstyle=\footnotesize, belowskip=0]
 // b:bool, x:i32, y:i32 (vectors of same length)
 t0:i32 = @compress(b, x);
 t1:i32 = @compress(b, y);
@@ -443,7 +443,7 @@ For example, the \texttt{@each} function is shown in \refFig{fig:list_function}.
 following sections we denote the applied function as \texttt{@f}.
 
 \begin{figure}[htbp]
-\begin{lstlisting}[language=HorseIR, frame=single, basicstyle=\footnotesize]
+\begin{lstlisting}[language=HorseIR, frame=single, basicstyle=\footnotesize, belowskip=0]
 // x:i32, y:i32 vectors; @f function
 t0:list<i32> = @list(x, y);
 t1:list<i32> = @each(@f, t0);

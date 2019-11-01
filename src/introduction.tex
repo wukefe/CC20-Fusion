@@ -14,15 +14,13 @@ research efforts within the database community looking into efficient SQL query
 execution on such a data format.
 
 Given that in a column store each column of a table is stored as an array,
-array programming languages appear as a promising construct to provide support
-for query execution. In fact, \OldPaperAuthor introduced an intermediate
-representation (IR) language, called \textit{HorseIR}, providing efficient
-database operators.
-\new{At the same time, it is a general-purpose high-level IR, and can therefore serve
-not only as an effective representation for SQL but also other higher-level 
-operators, pre-defined built-in functions, and other array-base languages such
-as MATLAB. Thus, compared to existing query compilers that translate from relational
-algebra to optimized code (e.g. Hyper), it is much more general and extensible.}
+array programming languages appear as a promising construct to implement query
+execution. In fact, \OldPaperAuthor introduced an intermediate representation (IR),
+\textit{HorseIR}, providing efficient database operators.
+\new{At the same time, it is a general-purpose high-level language, and can therefore serve not only as an effective representation for SQL, but also other higher-level 
+operators and array-based languages such as MATLAB. Thus, compared to existing query
+compilers that translate from relational algebra to optimized code (e.g.
+Hyper~\cite{Neumann2011:HyPer}), it is much more general and extensible.}
 % \OldPaper shows very good results on standard database benchmarks.
 
 SQL queries are first transformed into execution plans using standard database
@@ -58,9 +56,10 @@ is a vector with the same number of elements, and the result \texttt{R} is a
 scalar.  A straightforward way to generate C code from this is to generate two loops, the first applying the boolean selection and producing an intermediate result, and the second loop performing the reduction on this intermediate result.  A more optimized version, however, would fuse the two loops into one, performing the reduction on the fly and avoiding generation of an intermediate result:
 
 % basicstyle: \tiny, \small, or \footnotesize
+% linewidth=.92\columnwidth
 \begin{center}
 \begin{tabular}{c}
-\begin{lstlisting}[language=C, frame=single, basicstyle=\small, linewidth=.92\columnwidth]
+\begin{lstlisting}[language=C, basicstyle=\small]
 R=0;
 for(int i=0; i<C.size; i++) {
     if(C[i]) { R += A[i]; } // true block
@@ -98,10 +97,9 @@ while possible in principle, our experience has been that these optimization opp
 % \refFig{fig:fusion_idea} shows that we propose automatic fusion which contains
 % element-wise fusion and some parts of pattern-based fusion
 % so that less pattern-based fusion is required.
-
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=.95\columnwidth]{./src/figure/basic-idea.pdf}
+\includegraphics[width=.85\columnwidth]{./src/figure/basic-idea.pdf}
 \caption{Automatic array-based (HorseIR) operator fusion for SQL queries includes element-wise fusion and a limited set of patterns.}
 \label{fig:fusion_idea}
 \end{figure}
