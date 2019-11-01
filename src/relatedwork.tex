@@ -78,13 +78,13 @@ challenging to generalize. % page 21
 \new{
 HyPer~\cite{Neumann2011:HyPer}, an in-memory database system, adopts a data-centric
 model when compiling SQL queries to LLVM code. They developed a greedy
-algorithm to produce/consume operators directly in an execution plan in order
-to fuse relational operations directly.
+algorithm to produce/consume operators directly in an execution plan and fuse relational
+operations directly.
 Peloton~\cite{Menon2017:Peloton} considers operator fusion for operators within a pipeline.
 The stream-fusion~\cite{Shaikhha2018:LoopFusion} needs to define extra
 fusion-related constructs for producing, consuming, unfolding, and destroying a
 collection.
-We have a different fusion strategy by providing a systematic approach which
+By contrast, our fusion strategy is a systematic approach which
 collects precise shape information on a well-defined array-based language for
 automatic fusion.}
 
