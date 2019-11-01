@@ -12,7 +12,7 @@ Time Table
 | Important Time     | Message                | Status     |
 | -----------------: | :--------------------- | :--------: |
 | Oct. 25, 2019      | Abstract Submission    | Submitted  |
-| Nov.  1, 2019      | Paper Submission       |            |
+| Nov.  1, 2019      | Paper Submission       | Submitted  |
 | Nov. 24, 2019      | Artifact Submission    |            |
 | Dec. 4-6, 2019     | Author Rebuttal Period |            |
 | Dec. 24, 2019      | Paper Notification     |            |
