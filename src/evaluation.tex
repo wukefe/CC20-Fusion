@@ -113,13 +113,12 @@ qualify. Thus, fusing loops has little benefit but also does not harm the
 execution.
 
 \new{
-Compared toh HorseIR-opt1, we improve for four queries, are the same for two
-queries, and are worse for two queries. The geometric mean execution time  of
-HorseIR-opt2 is about 12\% faster than HorseIR-opt1. This performance increase is
-due to the significant increase in fused statements discussed in \refSec{fusing_stmts}.
-Our technique thus effectively identifies fusion opportunities in HorseIR
-programs generated from SQL queries using a more systematic and general
-approach than patterns.}
+Compared to HorseIR-opt1, we improve four queries, are the same for two
+queries, and are worse for two queries giving a geometric speedup of 12\%. This
+performance improvement is due to the significant increase in fused statements
+discussed in \refSec{fusing_stmts}. Our technique thus effectively identifies
+fusion opportunities in HorseIR programs generated from SQL queries using a
+more systematic and general approach than patterns.}
 
 %%% The main computation part of the queries have operators unable to be fused.
 %%% That means we can either improve the operators with efficient implementations
