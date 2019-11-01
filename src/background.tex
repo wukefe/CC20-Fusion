@@ -18,7 +18,6 @@ There are two kinds of loop fusion:
 (2) \textit{Fusion when sharing the same loop head}.
 }
 
-\new{
 Ideally, a smart compiler can optimize loops in steps:
 (I) resolve the data dependency between variables inside loops;
 (II) identify the use of temporary, intermediate result arrays; and
@@ -28,7 +27,6 @@ compilers~\cite{Kennedy01:FastFusion,Kennedy1993:LoopFusion}.
 Instead, we believe it is much easier if the potential of loop fusion is
 already performed looking at the high-level language
 (i.e., in the array-based program) due to the higher level of abstraction.
-}
 
 %%% Loop fusion is an effective technique for improving program performance since
 %%% loops usually dominate the performance of program execution.
