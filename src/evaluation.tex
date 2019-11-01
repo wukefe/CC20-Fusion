@@ -198,17 +198,15 @@ be effectively amortized.}
 
 \subsection{Discussion}
 
-In summary, we can see that fusion across statements is beneficial in many
-cases. However, we can see two situations where one has to be more careful about
-applying fusion. The first is that fusing too many statements might become
-sub-optimal. We believe this is due to the increased pressure on register
-allocation. Maybe one could create heuristics to determine a maximum number of
-statements to be fused. 
+In summary, fusion across statements is beneficial in many cases. However, there
+are two situations where one has to be more careful about applying fusion. Firstly,
+fusing too many statements might become sub-optimal, likely due to the increased
+register pressure. In practice, one could create heuristics to determine a maximum number of statements to be fused.
 
 The second situation arises when filtering conditions have a high selectivity,
-e.g., when only 10 out of a million records qualify. Then the benefit of
+e.g., when only 10 out of a million records qualify. In this case, the benefit of
 avoiding intermediate results is negligible, while the overhead of code fusion
 might become a factor. 
-If one had enough information about the properties of the actual data, such
-unnecessary fusions could be avoided. Therefore, introducing runtime optimizations
-to decide when to fuse is an interesting avenue for future research.
+If one had enough information about the actual data, such unnecessary fusions
+could be avoided. Therefore, introducing runtime optimizations deciding when to
+fuse is an interesting avenue for future research.
