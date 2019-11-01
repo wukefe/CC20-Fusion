@@ -96,18 +96,16 @@ over HorseIR-opt1 and MonetDB. HorseIR-opt2 provides an improvement over
 MonetDB (speedup > 1) for all but one query and the improvement is quite significant. 
 
 \textit{When we are better.}
-For q1, our optimizer identifies eight fusible sections that are
-merged into one big loop that helps improve the overall performance.
-For q6, two blocks of element-wise functions that are separated by
-non-element-wise statement (\texttt{@compress}) are fused together. In
-both cases, intermediate results are avoided and performance improved.
-For q12 and q19, more statements are fused and less intermediate results
-created but the effect is weaker.
+In q1, our optimizer identifies eight fusible sections that are merged into one
+big loop. In q6, two blocks of element-wise functions separated by a non-element-wise
+statement (\texttt{@compress}) are fused together. In both cases, intermediate
+results are avoided and performance improved. In q12/q19, more statements
+are fused and less intermediate results created but the effect is weaker.
 
 \textit{When we are worse.}
-For q14 and q22, the loop sizes of fused statements are relatively small with
-long expressions in the loop body. Thus, fusion makes things more complicated
-without the benefit of iterating less times. 
+In q14/q22, the fused loop sizes are relatively small with long expressions in
+the body. Thus, fusion introduces complexity without significantly fewer
+iterations. 
 
 \textit{When we behave similarly.}
 For queries q4 and q16, the filters are very selective and only a few rows
@@ -115,7 +113,7 @@ qualify. Thus, fusing loops has little benefit but also does not harm the
 execution.
 
 \new{
-Comparing with HorseIR-opt1, we improve for four queries, are the same for two
+Compared toh HorseIR-opt1, we improve for four queries, are the same for two
 queries, and are worse for two queries. The geometric mean execution time  of
 HorseIR-opt2 is about 12\% faster than HorseIR-opt1. This performance increase is
 due to the significant increase in fused statements discussed in \refSec{fusing_stmts}.

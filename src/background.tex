@@ -6,8 +6,8 @@ optimization capabilities.
 
 \subsection{Loop Fusion}
 
-Loop fusion is an effective technique for improving program performance since
-loops usually dominate the performance of program execution.
+Loop fusion is an effective technique to improve program performance as
+loops usually dominate the execution.
 In the context of array-based languages, loop fusion is applied during the code
 generation phase, when array-based functions are translated into loops of the
 target language, e.g., C. The goal of loop fusion is to minimize the number of
@@ -65,11 +65,9 @@ HorseIR \OldPaper was designed to represent execution plans for SQL queries
 where data is represented in column-format and assumed to reside in
 main-memory. HorseIR represents the columns of the database tables as vectors,
 and uses lists for compound data. It provides dozens of data types to
-accommodate the many data types found in database systems. 
-
-Moreover, it supports a large set of array-based built-in functions that
-represent the arithmetic and database-related operators that are commonly used
-in SQL queries.
+accommodate the many data types found in database systems. Moreover, it supports a
+large set of array-based built-in functions that  represent the arithmetic and
+database-related operators that are commonly used in SQL queries.
 
 Fig.~\ref{fig:motivation_example} shows a motivating example of queries
 executing with HorseIR framework. Fig.~\ref{fig:motivation_sql} shows a SQL
@@ -119,19 +117,14 @@ records that fulfill the filtering condition of the query. In (S3) and (S4)
 \texttt{item\_price} and \texttt{item\_discount} columns.
 However, the intermediate results of \texttt{t3} and \texttt{t4} can be avoided
 because the retrieval can be fused with the subsequent arithmetic and
-aggregation functions. 
+aggregation functions. In fact, for the given example, it is possible to fuse and
+generate a single loop as shown in Fig.~\ref{fig:motivation_example} (c).
 
-In fact, for the given example, it is possible to fuse everything into one
-single loop as shown in Fig.~\ref{fig:motivation_example} (c).
 In this paper, we show how fusion \textit{across} built-in functions can be
 done automatically and systematically by using a principled shape and
-conformability analysis. 
-
-Importantly, note that the previous work~\OldPaper, in addition to element-wise
-fusion, also supports fusion based on pattern rules, such as tree-based patterns.
-However, using patterns is quite challenging as it requires the expertise of
-SQL execution plans. Furthermore, there exist many different types of queries,
-and thus potentially many different patterns. It is not clear, whether the
-patterns presented in \OldPaper are exhaustive. 
-
-
+conformability analysis. Importantly, although previous work~\OldPaper also fuses
+operations, it is based on simplistic element-wise fusion and pattern rules. Using
+patterns is quite challenging as it requires the expertise of SQL execution plans.
+Furthermore, there exist many different types of queries, and thus potentially many
+different patterns. It is not clear, whether the patterns presented in \OldPaper are
+exhaustive. 
