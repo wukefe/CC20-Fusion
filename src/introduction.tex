@@ -100,20 +100,19 @@ while possible in principle, our experience has been that these optimization opp
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.85\columnwidth]{./src/figure/basic-idea.pdf}
-\caption{Automatic array-based (HorseIR) operator fusion for SQL queries includes element-wise fusion and a limited set of patterns.}
+\caption{Automatic operator fusion for SQL queries includes element-wise fusion and a small set of patterns.}
 \label{fig:fusion_idea}
 \end{figure}
 
 In this paper we provide a systematic approach to analyze the SQL query programs
 and generate optimized code. As shown in \refFig{fig:fusion_idea},
-\textit{automatic fusion} is a blend of element-wise fusion and a limited set of
-patterns. Including effective element-wise fusion allowed us to replace numerous fixed
-patterns with a more general approach. More specifically, we provide a detailed
+\textit{automatic fusion} is a blend of smart element-wise fusion and a limited set of
+patterns that cannot be handled. More specifically, we provide a detailed
 analysis of the most important built-in functions used for executing SQL operators
 and explain how to optimize across such functions. Our approach is based on a
 \textit{shape analysis}, which describes the layout and size of variables as
-functions are applied. This allows us to fuse loops extensively, skip unnecessary
-iterations over the data, and avoid intermediate results.  
+functions are applied. This allows us to fuse loops extensively, and avoid unnecessary
+iterations over the data and intermediate results.  
 
 % contribution
 The contributions of this paper are summarized as follows:
@@ -121,7 +120,7 @@ The contributions of this paper are summarized as follows:
 \begin{itemize}
 \item We explore a new approach to improve database query performance by
       applying techniques derived from array programming. We focus on HorseIR, an IR specifically designed to support database query execution.
-\item We perform shape analysis on the built-in functions of HorseIR that represent database operators. This allows us to collect precise shape information and provide a conformability analysis to identify fusible sections in the HorseIR code. 
+\item We perform shape analysis on the built-in functions of HorseIR that represent database operators. This allows us to collect precise shape information and provide a conformability analysis to identify fusible sections. 
 \item We present a set of optimization and code generation strategies to automatically
       generate optimized code.
 \item We conduct experiments on the database benchmark TPC-H, to show the effectiveness of our technique.
