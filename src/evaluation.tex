@@ -146,13 +146,13 @@ element-wise fusion in HorseIR-opt1 and the more general function fusion in
 HorseIR-opt2. Pattern-based fusion is not shown as both approaches use the
 same patterns. 
 
-We can see that our approach always fuses more statements than HorseIR-opt1.
+As shown, our approach always fuses more statements than HorseIR-opt1.
 In q1 and q22, the large increase in fused statements is due to list-related
 statements that can now be fused without fixed patterns. Furthermore, our optimizer
 exploits fusion of mixed function kinds such as element-wise and reduction functions.
 However, as seen in the previous analysis, fusing is not always beneficial. In q22,
 we fuse significantly more than HorseIR-opt1, but the loops now contain complex
-expressions which result in worse performance compared to HorseIR-opt1.
+expressions which result in worse performance.
 
 \begin{figure}[htbp]
 \centering
