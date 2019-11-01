@@ -191,9 +191,10 @@ allStmts $\gets$ reversed topological order of the graph G\;
 
 \subsubsection{Vector Conformability}
 
-Identifying fusible sections for vector functions is divided into two passes. The first
-pass identifies the main fusible sections, while the second pass corrects any data
-dependencies between sections. The algorithm terminates when all statements have been visited.
+Identifying fusible sections for vector functions is divided into two passes.
+The first pass identifies the main fusible sections, while the second pass corrects
+any data dependencies between sections. The algorithm terminates when all statements
+have been visited.
 
 \head{1st pass:} Finding all eligible statements for a fusible section verifies for type
 and shape conformability.
@@ -296,8 +297,8 @@ Given the HorseIR program in \refFig{fig:motivation_horseir}, our algorithm iden
 fusible section shown in \refFig{fig:fusion_example}. Initially, the variable \texttt{c0}
 is assigned a dynamic vector shape with unique ID, \texttt{V(d)}, as the exact size depends
 on the input table. Next, the 3 element-wise functions in statements \texttt{S0},
-\texttt{S1}, and \texttt{S2} propagate the vector shape \texttt{V(d)} according to the shape
-rules. Both compression functions in \texttt{S3} and \texttt{S4} generate a new shared scan shape
+\texttt{S1}, and \texttt{S2} propagate the vector shape \texttt{V(d)} according to the shape rules.
+Both compression functions in \texttt{S3} and \texttt{S4} generate a new shared scan shape
 \texttt{Vs(t2)} as they both use the same boolean mask. The following binary function
 uses this equality to correctly infer its output shape. Finally, the reduction function
 \texttt{@sum} returns a vector with one element. Note that all functions in the computed

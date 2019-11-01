@@ -16,19 +16,13 @@ execution on such a data format.
 Given that in a column store each column of a table is stored as an array,
 array programming languages appear as a promising construct to provide support
 for query execution. In fact, \OldPaperAuthor introduced an intermediate
-representation (IR) language, called \textit{HorseIR}, targeted at database
-support.
-\new{It has been designed with database operators and optimization
-techniques targeting a fast execution of these operators.
-At the same time, it is a general high-level IR, and thus, can serve not only
-for the optimization of standard SQL operators but also for new sets of
-operators (e.g., developed for more complex data analysis),
-new categories of built-in functions with pre-defined behaviours can be added
-easily, and it could even be used by other array-based languages such as MATLAB
-as an intermediate representation.
-Thus, compared to query compilers in database systems such as HyPer, it is more
-general and extensible as HyPer performs a direct translation from relational
-algebra operators to optimized code.}
+representation (IR) language, called \textit{HorseIR}, providing efficient
+database operators.
+\new{At the same time, it is a general-purpose high-level IR, and can therefore serve
+not only as an effective representation for SQL but also other higher-level 
+operators, pre-defined built-in functions, and other array-base languages such
+as MATLAB. Thus, compared to existing query compilers that translate from relational
+algebra to optimized code (e.g. Hyper), it is much more general and extensible.}
 % \OldPaper shows very good results on standard database benchmarks.
 
 SQL queries are first transformed into execution plans using standard database
@@ -36,8 +30,7 @@ optimization techniques that describe in which order and how database operators
 such as joins, selections and aggregations should be executed depending on the
 data to be analyzed. These execution plans are then translated into HorseIR,
 the resulting code is optimized using techniques from array programming, and
-finally the optimized code is compiled into C code executable on different
-platforms.
+finally the optimized code is compiled into multi-platform C code.
 
 The approach used in HorseIR, however, does not take full advantage of the
 optimization techniques available. Instead, it is restricted to basic code
@@ -110,23 +103,20 @@ while possible in principle, our experience has been that these optimization opp
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.95\columnwidth]{./src/figure/basic-idea.pdf}
-\caption{Introducing automatic fusion to optimize the array-based code
-(HorseIR) generated from database queries with less pattern-based fusion.}
+\caption{Automatic array-based (HorseIR) operator fusion for SQL queries includes element-wise fusion and a limited set of patterns.}
 \label{fig:fusion_idea}
 \end{figure}
 
-In this paper we provide a more systematic approach to analyzing the query
-program and generating optimized code.
-As depicted in \refFig{fig:fusion_idea}, it is called \textit{automatic fusion}
-which contains element-wise fusion and some parts of pattern-based fusion so
-that less pattern-based fusion is required.
-In particular, we provide a detailed analysis of the most important built-in
-functions that are useful for executing SQL operators, and how we can optimize
-across such functions.
-To do so, we have a closer look at \textit{shape analysis}, and how shape propagates
-when functions are combined. This allows us to use loop fusion extensively to
-avoid unnecessary iterations over the data and intermediate results.  
-
+In this paper we provide a systematic approach to analyze the SQL query programs
+and generate optimized code. As shown in \refFig{fig:fusion_idea},
+\textit{automatic fusion} is a blend of element-wise fusion and a limited set of
+patterns. Including effective element-wise fusion allowed us to replace numerous fixed
+patterns with a more general approach. More specifically, we provide a detailed
+analysis of the most important built-in functions used for executing SQL operators
+and explain how to optimize across such functions. Our approach is based on a
+\textit{shape analysis}, which describes the layout and size of variables as
+functions are applied. This allows us to fuse loops extensively, skip unnecessary
+iterations over the data, and avoid intermediate results.  
 
 % contribution
 The contributions of this paper are summarized as follows:

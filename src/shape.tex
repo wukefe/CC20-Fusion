@@ -32,13 +32,13 @@ Shape       & \multicolumn{1}{c|}{Description}  \\ \hline
 
 The number of elements may either be a compile time constant, or a dynamic value
 only known at runtime. We include a separate shape for scalar data as some built-in
-functions exhibit specialized behaviour depending on the exact number of elements.
+functions exhibit specialized behaviour depending on the exact size.
 
 Dynamic vector shapes describe objects that depend on runtime properties. Our system
 assigns a unique ID to such vectors, so two vectors with the same dynamic ID have the
 same shape. A specialized dynamic shape, \shapeVS{a}, describes the output result
 of the boolean selection function \texttt{@compress} with boolean mask \texttt{a}. Our
-code generation strategy uses the boolean selection shape for further fusion and
+code generation strategy uses the this shape for further fusion and
 avoids storing intermediate results.
 
 \subsubsection{List}
