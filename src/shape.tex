@@ -35,10 +35,9 @@ only known at runtime. We include a separate shape for scalar data as some built
 functions exhibit specialized behaviour depending on the exact size.
 
 Dynamic vector shapes describe objects that depend on runtime properties. Our system
-assigns a unique ID to such vectors, so two vectors with the same dynamic ID have the
+assigns a unique ID to such vectors, so two vectors with the same ID have the
 same shape. A specialized dynamic shape, \shapeVS{a}, describes the output result
-of the boolean selection function \texttt{@compress} with boolean mask \texttt{a}. Our
-code generation strategy uses the this shape for further fusion and
+of the boolean selection function \texttt{@compress} with boolean mask \texttt{a}. The code generator uses this boolean selection shape for further fusion and
 avoids storing intermediate results.
 
 \subsubsection{List}
@@ -170,8 +169,8 @@ a:i32 = @plus(A, B);
 b:i32 = @mul(A, B);
 \end{Verbatim}
 \end{small}
-There are two kinds of built-in functions in HorseIR: functions for vectors and
-functions for lists. They can be categorized as follows:
+HorseIR built-in functions can be categorized into the following categories based
+on shape behaviour:
 
 \begin{description}
 \item[Element-wise (E)]:

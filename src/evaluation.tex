@@ -5,11 +5,10 @@ experiments on the TPC-H benchmark.
 
 \head{Experimental setup.}
 We run all benchmarks under Ubuntu 16.04.6 LTS on a server which has 4 Intel
-Xeon E7-4850 2.00GHz (total 40 cores with 80 threads) and 128 GB RAM.
+Xeon E7-4850 2.00GHz (total 40 cores/80 threads) and 128 GB RAM.
 We use GCC compiler with the version \textit{v8.1.0} to compile the generated C
-code after optimizations with a maximum optimization option \texttt{-O3} and
-enabled \texttt{-march=native}.
-We use the latest MonetDB \cite{IdreosS2012} released as \textit{Apr2019} with
+code with optimization level \texttt{-O3} and \texttt{-march=native} enabled.
+We use the latest MonetDB \cite{IdreosS2012} released in \textit{Apr2019} with
 version v11.33.3, as a baseline to compare with the following HorseIR versions:
 (1) HorseIR-noopt: a naive version without any optimizations;
 (2) HorseIR-opt1 : an optimized version with element-wise and pattern-based
@@ -175,17 +174,12 @@ in worse performance compared to the HorseIR-opt1.
 \label{fig:compilation_time}
 \end{figure}
 
-\new{
-The result of the compilation time of generated C code in
-\refFig{fig:compilation_time} demonstrates that HorseIR-opt2 needs the most
-compilation time as it identifies most optimizations and generates most complex
-code among three versions of code generated from HorseIR programs.
-As can be seen, the compilation time is almost the same for HorseIR-noopt because
-generated code contains library function calls that avoid any further optimizations.
-With a large size of input data or a query needs to be executed many times,
-the time spent on compilation time can be amortized.
-}
-
+\new{The compilation time of the generated C code seen in \refFig{fig:compilation_time}
+shows that our technique is slower to generate the binary than more naive approaches.
+However, the increase in compilation time is associated with exploitation of additional
+optimization opportunities that benefit the execution time. With large data sizes
+common to modern applications or repeated query execution, the compilation time can
+be effectively amortized.}
 
 %%% In the query q1, the number of patterns are significantly reduced because a set
 %%% of fusion nodes can be further merged into a single loop due to the same loop
