@@ -18,6 +18,10 @@ eliminating intermediate results. As with the shape analysis, this check is cons
 fusing statements only if provably correct. Trivially, element-wise functions operating on
 the same vector shape may be fused, but we can also fuse both boolean selection and
 reductions. The basic rules for conformability are described in \refTable{tab:conformability}.
+In our approach, we check conformability between statements and their
+\textit{definition statements} of the input parameters (predecessors in the data
+dependence graph).
+
 \begin{table}[htbp]
 \centering
 \caption{Conformable rules for two shapes} \label{tab:conformability}
@@ -35,9 +39,7 @@ reductions. The basic rules for conformability are described in \refTable{tab:co
 \end{tabular}
 \end{small}
 \end{table}
-In our approach, we check conformability between statements and their
-\textit{definition statements} of the input parameters (predecessors in the data
-dependence graph).
+
 
 \subsubsection{Algorithm}
 

@@ -57,16 +57,25 @@ scalar.  A straightforward way to generate C code from this is to generate two l
 
 % basicstyle: \tiny, \small, or \footnotesize
 % linewidth=.92\columnwidth
-\begin{center}
-\begin{tabular}{c}
-\begin{lstlisting}[language=C, basicstyle=\small]
+%% \begin{center}
+%% \begin{tabular}{c}
+%% \begin{lstlisting}[language=C, basicstyle=\small]
+%% R=0;
+%% for(int i=0; i<C.size; i++) {
+%%     if(C[i]) { R += A[i]; } // true block
+%% }
+%% \end{lstlisting}
+%% \end{tabular}
+%% \end{center}
+
+\begin{small}
+\begin{Verbatim}[xleftmargin=.15\columnwidth]
 R=0;
 for(int i=0; i<C.size; i++) {
     if(C[i]) { R += A[i]; } // true block
 }
-\end{lstlisting}
-\end{tabular}
-\end{center}
+\end{Verbatim}
+\end{small}
 
 % add lines around box: frame=single
 %\begin{small}
@@ -99,7 +108,7 @@ while possible in principle, our experience has been that these optimization opp
 % so that less pattern-based fusion is required.
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=.85\columnwidth]{./src/figure/basic-idea.pdf}
+\includegraphics[width=.9\columnwidth]{./src/figure/basic-idea.pdf}
 \caption{Automatic operator fusion for SQL queries includes element-wise fusion and a small set of patterns.}
 \label{fig:fusion_idea}
 \end{figure}

@@ -332,6 +332,14 @@ those values with a corresponding \texttt{TRUE} flag in the mask. \refTable{rule
 describes the full shape rules where \texttt{x} is the mask and \texttt{y} the values
 vector.
 
+For constant sized vectors where the length agrees, the output shape is determined at
+runtime. If the lengths differ a compile-time error is thrown. Dynamic length vectors
+also generate new scan shapes parameterized on the boolean mask. As multiple value
+vectors may be compressed using the same mask, we internally map each boolean mask
+to its output shape. When propagating, this map is first checked before generating
+a new unique shape. \refFig{fig:scan_shape} shows an example of two vectors which
+have the same output scan shape.
+
 \begin{figure}[htbp]
 \begin{lstlisting}[language=HorseIR, frame=single, basicstyle=\footnotesize]
 // b:bool, x:i32, y:i32 (vectors of same length)
@@ -342,14 +350,6 @@ t1:i32 = @compress(b, y);
 \vspace{-3mm}
 \caption{Example propagating the scan shape.} \label{fig:scan_shape}
 \end{figure}
-
-For constant sized vectors where the length agrees, the output shape is determined at
-runtime. If the lengths differ a compile-time error is thrown. Dynamic length vectors
-also generate new scan shapes parameterized on the boolean mask. As multiple value
-vectors may be compressed using the same mask, we internally map each boolean mask
-to its output shape. When propagating, this map is first checked before generating
-a new unique shape. \refFig{fig:scan_shape} shows an example of two vectors which
-have the same output scan shape.
 
 %%% \todo{Update table to include ^1 for error cases, V_s missing}
 
@@ -439,6 +439,10 @@ y               & \shapeS & \shapeV{$c_0$} & \shapeV{$d_0$} & \shapeVS{$a_0$} \\
 
 \subsubsection{Lists}
 
+List functions apply a function on cells individually and merge the results into a new list.
+For example, the \texttt{@each} function is shown in \refFig{fig:list_function}. In the
+following sections we denote the applied function as \texttt{@f}.
+
 \begin{figure}[htbp]
 \begin{lstlisting}[language=HorseIR, frame=single, basicstyle=\footnotesize]
 // x:i32, y:i32 vectors; @f function
@@ -449,10 +453,6 @@ t1:list<i32> = @each(@f, t0);
 \vspace{-3mm}
 \caption{Example of a list function.} \label{fig:list_function}
 \end{figure}
-
-List functions apply a function on cells individually and merge the results into a new list.
-For example, the \texttt{@each} function is shown in \refFig{fig:list_function}. In the
-following sections we denote the applied function as \texttt{@f}.
 
 \sloppy % avoid a math line to be too long
 \head{Function each} applies function \texttt{@f} to each cell in a list. Each cell shape
