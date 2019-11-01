@@ -8,31 +8,29 @@ We run all benchmarks under Ubuntu 16.04.6 LTS on a server which has 4 Intel
 Xeon E7-4850 2.00GHz (total 40 cores/80 threads) and 128 GB RAM.
 We use GCC compiler with the version \textit{v8.1.0} to compile the generated C
 code with optimization level \texttt{-O3} and \texttt{-march=native} enabled.
-We use the latest MonetDB \cite{IdreosS2012} released in \textit{Apr2019} with
-version v11.33.3, as a baseline to compare with the following HorseIR versions:
-(1) HorseIR-noopt: a naive version without any optimizations;
-(2) HorseIR-opt1 : an optimized version with element-wise and pattern-based
-fusion enabled as presented in the previous work~\OldPaper; and
-(3) HorseIR-opt2 : optimization uses the approach presented in this paper.
+We use the latest MonetDB~\cite{IdreosS2012} released in \textit{Apr2019} with
+version v11.33.3, as a baseline comparison for the following HorseIR versions:
+(1) HorseIR-noopt: naive version with no optimizations;
+(2) HorseIR-opt1 : optimized version with element-wise and pattern-based
+fusion as presented in the previous work~\OldPaper; and
+(3) HorseIR-opt2 : optimizes version using the approach presented in this paper.
 
 \head{Execution time.}
 Our results present the core execution time of the database query. That is,
-compilation time, the time to load the input data into memory and the time to
-output results are not considered, as we want to zoom on the effects of the
-optimization.  The results present the average over 15 executions for each
-query.
+compilation time, input data loading time and results output time are not considered
+as we want to zoom in on the effects of the optimization. The results present
+the average over 15 executions for each query.
 
 % \head{Micro-benchmarks.}
 
 \head{TPC-H SQL benchmarks.}
 TPC-H \cite{TPCH2017} is a widely used SQL benchmark suite for analytical data
-processing simulating real Business to Consumer (B2C)
-database applications. The database has 8 tables over which 22 queries are
-defined.  The database size can be varied by indicating a  \textit{scale factor} (SF).
-For example, a scale factor of 1 (i.e. SF1) means 1GB of input
-data. With an increasing scale factor, (nearly) each of the tables holds more
-data records. Our results are for SF1 but initial results on larger scale
-factors show similar results.
+processing simulating real Business to Consumer (B2C) database applications. The 
+database has 8 tables over which 22 queries are defined.  The database size can be
+varied by indicating a \textit{scale factor} (SF). For example, a scale factor of 1
+(i.e. SF1) means 1GB of input data. With an increasing scale factor, (nearly) each
+of the tables holds more data records. Our results are for SF1 but initial results
+on larger scale factors show similar results.
 
 %% For this paper, we have selected 8 of the 22 queries (q1/4/6/12/14/16/19/22).
 %% These are the queries where the basic built-in functions that we aim to fuse
@@ -42,7 +40,7 @@ factors show similar results.
 %% optimizations presented in \OldPaper and in this paper have less impact.
 %% Future work will look more closely at fusion potential for join operations.  
 
-For this paper, we have selected a subset of queries in which the basic built-in
+For this paper, we have selected the subset of queries in which the basic built-in
 functions that we aim to fuse have a major impact on the query execution time.
 In particular, these queries have a maximum of 2 joins. Joins are very
 expensive, and in queries with more than 2 joins, the join execution takes up
@@ -122,11 +120,9 @@ execution.
 
 \new{
 Comparing with HorseIR-opt1, we improve for four queries, are the same for two
-queries, and are worse for two queries. The average execution times of
-HorseIR-opt2 are about 12\% faster than HorseIR-opt1 in terms of geometric
-means.
-This performance increase is due to the significant increase in fused
-statements discussed in \refSec{fusing_stmts}.
+queries, and are worse for two queries. The geometric mean execution time  of
+HorseIR-opt2 is about 12\% faster than HorseIR-opt1. This performance increase is
+due to the significant increase in fused statements discussed in \refSec{fusing_stmts}.
 Our technique thus effectively identifies fusion opportunities in HorseIR
 programs generated from SQL queries using a more systematic and general
 approach than patterns.}
